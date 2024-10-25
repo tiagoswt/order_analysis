@@ -58,6 +58,9 @@ def main():
 
     # Sidebar Filters for Analysis
     st.sidebar.header("Filter Options")
+    vip_filter = st.sidebar.selectbox(
+        "Select Customer Type", ["All Customers", "VIP", "Non-VIP"]
+    )
     date_range = st.sidebar.date_input(
         "Select Date Range", [data["orderdate"].min(), data["orderdate"].max()]
     )
@@ -82,6 +85,12 @@ def main():
         & (data["shipcountrycode"].isin(selected_countries))
         & (data["ref_total"].isin(selected_product_refs))
     ]
+
+    # Apply VIP filter
+    if vip_filter == "VIP":
+        filtered_data = filtered_data[filtered_data["Vip"] == 1]
+    elif vip_filter == "Non-VIP":
+        filtered_data = filtered_data[filtered_data["Vip"] == 0]
 
     if filtered_data.empty:
         st.warning(
@@ -172,3 +181,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
